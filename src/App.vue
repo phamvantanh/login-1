@@ -1,20 +1,33 @@
 <template>
   <div id="app">
-   <router-view></router-view>
-  </div>  
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
-
-// import Login from './components/Login.vue'
-// import Home from './components/Home.vue'
+import CookiesService from "./services/cookies.service";
+const cookiesService = CookiesService.getService();
+import { mapActions } from "vuex";
 
 export default {
-  name: 'app',
-  components: {
-    
-  }
-}
+  name: "app",
+  components: {},
+
+  methods: {
+    ...mapActions(["getUserProfile"]),
+  },
+
+  beforeMount() {
+    const token = cookiesService.getToken();
+    if (token) {
+      const userInfo = JSON.parse(localStorage.getItem("user"));
+      this.getUserProfile(userInfo);
+    } else {
+      localStorage.removeItem("user");
+      this.$router.push("/login");
+    }
+  },
+};
 </script>
 
 <style>
@@ -24,6 +37,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-
 }
 </style>

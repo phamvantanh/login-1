@@ -11,14 +11,14 @@ const CookiesService = (function () {
     return _service;
   }
   function _setToken(token) {
-    Cookies.set("access-token", token, { expires: 1 });
+    Cookies.set("access_token", token, { expires: 1 }); //1days
   }
 
   function _getToken() {
-    return Cookies.get("token");
+    return Cookies.get("access_token");
   }
   function _clearToken() {
-    Cookies.remove("token");
+    Cookies.remove("access_token");
   }
   return {
     getService: _getService,

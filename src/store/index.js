@@ -1,13 +1,12 @@
-import Vue from 'vue';
 import Vuex from 'vuex';
+import Vue from 'vue';
+import auth from './modules/auth';
 
-import { account } from './modules/account';
-import { alert } from './modules/alert';
-
+// Load Vuex
 Vue.use(Vuex);
-
-export const store = new Vuex.Store({
+// Create store
+export default new Vuex.Store({
   modules: {
-    account, alert
-  }
+    auth
+  },
 });
