@@ -1,0 +1,61 @@
+import axios from 'axios';
+import AuthApis from "../../factories/auth";
+import CookiesService from "../../services/cookies.service";
+const cookiesService = CookiesService.getService();
+
+const state = {
+  user: null,
+};
+
+
+const getters = {
+  isAuthenticated: state => !!state.user && cookiesService.getToken(),
+  StateUser: state => state.user,
+};
+
+const actions = {
+  async LogIn({ commit }, User) {
+    await axios.post(AuthApis.LOGIN, User)
+      .then(response => {
+        cookiesService.setToken(response.data.access_token);
+        cookiesService.setRefreshToken(response.data.refresh_token);
+        commit('setUser', response.data.user);
+        var userInfo = {
+          'email' : response.data.user.email,
+          'name' : response.data.user.name,
+        }
+        localStorage.setItem('user',  JSON.stringify(userInfo))
+        alert("Login Success");
+      })
+
+  },
+
+  async LogOut({ commit }, header) {
+    localStorage.removeItem('user')
+    await axios.post(AuthApis.LOGOUT, null, {
+      headers: header
+    })
+    cookiesService.clearToken();
+    cookiesService.clearRefreshToken();
+    commit('setUser', null);
+    alert("Logout Success");
+
+  },
+
+  getUserProfile({ commit }, user) {
+    commit('setUser', user);
+  }
+
+};
+const mutations = {
+  setUser(state, user) {
+    state.user = user
+  },
+
+};
+export default {
+  state,
+  getters,
+  actions,
+  mutations
+};
