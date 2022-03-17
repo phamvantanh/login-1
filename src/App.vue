@@ -24,7 +24,7 @@ export default {
       this.getUserProfile(userInfo);
     } else {
       localStorage.removeItem("user");
-      this.$router.push("/login");
+      this.$router.push("/login").catch(()=>{});
     }
   },
 };
