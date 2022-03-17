@@ -32,7 +32,10 @@ const actions = {
 
   async LogOut({ commit }, header) {
     localStorage.removeItem('user')
-    await axios.post(AuthApis.LOGOUT, null, {
+    var refresh_token = {
+      'refresh_token' : cookiesService.getRefreshToken()
+    }
+    await axios.post(AuthApis.LOGOUT, refresh_token, {
       headers: header
     })
     cookiesService.clearToken();
